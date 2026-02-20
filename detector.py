@@ -32,3 +32,20 @@ with open(log_file, "r") as f:
 for (ip, user), count in failed_attempts.items():
     risk = "ALTO" if count > threshold else "MEDIO"
     print(f"IP: {ip} | Usuario: {user} | Intentos fallidos: {count} | Riesgo: {risk}")
+
+import csv
+
+# Exportar resultados a CSV
+with open("failed_attempts_report.csv", "w", newline="") as csvfile:
+    fieldnames = ["IP", "Usuario", "Intentos fallidos", "Riesgo"]
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+    writer.writeheader()
+    for (ip, user), count in failed_attempts.items():
+        risk = "ALTO" if count > threshold else "MEDIO"
+        writer.writerow({
+            "IP": ip,
+            "Usuario": user,
+            "Intentos fallidos": count,
+            "Riesgo": risk
+        })
